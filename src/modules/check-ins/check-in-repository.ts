@@ -5,9 +5,6 @@ import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 
 export class CheckInsRepository implements CheckInsRepositoryInterface{
-    countByUserId(userId: string): Promise<number> {
-        throw new Error("Method not implemented.");
-    }
 
     async createCheckIn(data: CheckInUncheckedCreateInput): Promise<CheckIn> {
         return await prisma.checkIn.create({data})
@@ -38,6 +35,12 @@ export class CheckInsRepository implements CheckInsRepositoryInterface{
         });
         return checkIns
     }
+
+    async countByUserId(userId: string): Promise<number> {
+        return await prisma.checkIn.count({
+            where: { userId }
+    });
+}
 
 
 }

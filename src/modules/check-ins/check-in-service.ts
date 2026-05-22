@@ -58,4 +58,5 @@ export class CheckInsService {
         const checkInsCount = await this.checkInsRepository.countByUserId(userId);
         return checkInsCount
     }
+
 }

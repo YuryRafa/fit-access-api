@@ -9,8 +9,21 @@ export interface CreateGymDto{
 
 }
 
+export interface SearchGymsDTO{
+    query: string,
+    page: number,
+    
+}
+export interface GetNearbyGymsDTO{
+    userLatitude: number,
+    userLongitude: number,
+    
+}
 
 export interface GymsRepositoryInterface{
     findGymByid(id: string):Promise<Gym | null>
     createGym(data: Prisma.GymCreateInput):Promise<Gym>
+    searchGyms(query: string, page: number): Promise<Gym[]>
+    findManyNearby(latitude: number, longitude: number): Promise<Gym[]>
+
 }

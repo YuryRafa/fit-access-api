@@ -1,4 +1,5 @@
-import { CreateGymDto, GymsRepositoryInterface } from "@/@types/gyms-interfaces";
+import { CreateGymDto, GetNearbyGymsDTO, GymsRepositoryInterface, SearchGymsDTO } from "@/@types/gyms-interfaces";
+import { Gym } from "@/generated/prisma/client";
 
 export class GymsService {
     constructor(private gymsRepository: GymsRepositoryInterface) { }
@@ -13,6 +14,16 @@ export class GymsService {
         });
 
         return{gym}
+    }
+
+    async searchGyms({query, page}: SearchGymsDTO): Promise<Gym[]>{
+        const gyms = await this.gymsRepository.searchGyms(query, page)
+        return gyms
+    }
+    
+    async getNearbyGyms({userLatitude, userLongitude}: GetNearbyGymsDTO): Promise<Gym[]>{
+        const gyms = await this.gymsRepository.findManyNearby(userLatitude, userLongitude)
+        return gyms
     }
 
     
