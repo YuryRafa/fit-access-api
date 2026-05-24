@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { InMemoryCheckInsRepository } from '@/modules/check-ins/in-memory-check-in-repository';
 import { CheckInsService } from './check-in-service';
 import { InMemoryGymsRepository } from '../gyms/in-memory-gyms-repository';
+import { AppError } from '@/utils/app-error';
 
 let checkInsRepository: InMemoryCheckInsRepository;
 let gymsRepository: InMemoryGymsRepository;
@@ -166,4 +167,68 @@ describe('Get user metrics use case', async () => {
 
         expect(checkInsCount).toEqual(2)
     })
+})
+
+describe('Validate CheckIn Use Case', async () => {
+    beforeEach(async () => {
+        checkInsRepository = new InMemoryCheckInsRepository()
+        gymsRepository = new InMemoryGymsRepository()
+        service = new CheckInsService(checkInsRepository, gymsRepository);
+        vi.useFakeTimers()
+    });
+    afterEach(() => {
+        vi.useRealTimers()
+    })
+
+    it('should be able to validate the check-in', async () => {
+        
+        vi.setSystemTime(new Date(2026, 0, 20, 8, 0, 0))
+
+        const createdcheckIn = await checkInsRepository.createCheckIn({
+            gymId: 'gym-01', 
+            userId: 'user-01'
+        })
+        
+        const checkIn = await service.validateUserCheckIn({
+            checkInId: createdcheckIn.id
+        });
+        
+        expect(checkIn.validated_at).toEqual(expect.any(Date));
+        expect(checkInsRepository.items[0]!.validated_at).toEqual(expect.any(Date));
+
+    });
+    
+    it('should not be able to validate an non-existent check-in', async () => {
+        
+        vi.setSystemTime(new Date(2026, 0, 20, 8, 0, 0))
+
+        await expect(() => 
+            service.validateUserCheckIn({
+                checkInId: 'inexistent-check-in-id'
+            }),
+        ).rejects.toBeInstanceOf(AppError)
+        
+     
+    });
+    
+    it('should not be able to validate the ckeck-in 20 minutes after its', async () => {
+        
+        vi.setSystemTime(new Date(2026, 0, 1, 13, 40, 0))
+
+        const createdcheckIn = await checkInsRepository.createCheckIn({
+            gymId: 'gym-01', 
+            userId: 'user-01'
+        })
+
+        const twentyOneMinutesInMs = 1000 * 60 * 21
+
+        vi.advanceTimersByTime(twentyOneMinutesInMs)
+        
+        await expect(() => service.validateUserCheckIn({
+            checkInId: createdcheckIn.id
+        })).rejects.toBeInstanceOf(AppError) 
+     
+    });
+
+    
 })

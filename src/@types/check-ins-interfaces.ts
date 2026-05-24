@@ -7,10 +7,15 @@ export interface CreateCheckInDTO {
   userLongitude: number,
 }
 
+export interface ValidateCheckInDTO{
+  checkInId : string
+}
 
 export interface CheckInsRepositoryInterface {
     createCheckIn(data: Prisma.CheckInUncheckedCreateInput): Promise<CheckIn>
+    findByid(id: string): Promise<CheckIn | null>
     findByUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>
     findManyByUserId(userId: string, page? :number): Promise<CheckIn[]>
     countByUserId(userId:string):Promise<number>
+    saveCheckIn(checkIn: CheckIn):Promise<CheckIn>
 }

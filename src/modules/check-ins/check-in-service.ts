@@ -1,8 +1,9 @@
-import { CheckInsRepositoryInterface, CreateCheckInDTO } from '@/@types/check-ins-interfaces'
+import { CheckInsRepositoryInterface, CreateCheckInDTO, ValidateCheckInDTO } from '@/@types/check-ins-interfaces'
 import { GymsRepositoryInterface } from '@/@types/gyms-interfaces';
 import { CheckIn } from '@/generated/prisma/client';
 import { AppError } from '@/utils/app-error';
 import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates';
+import dayjs from 'dayjs';
 
 export class CheckInsService {
     constructor(
@@ -51,12 +52,36 @@ export class CheckInsService {
 
     async getUserCheckInHistory({ userId, page = 1 }: { userId: string, page?: number }): Promise<CheckIn[]> {
         const checkIns = await this.checkInsRepository.findManyByUserId(userId, page);
-        return checkIns
+        return checkIns;
     }
 
     async getUserMetrics(userId: string):Promise<number> {
         const checkInsCount = await this.checkInsRepository.countByUserId(userId);
-        return checkInsCount
+        return checkInsCount;
+    }
+
+    async validateUserCheckIn( {checkInId}:ValidateCheckInDTO):Promise<CheckIn>{
+        const checkIn = await this .checkInsRepository.findByid(checkInId);
+
+        if(!checkIn){
+            throw new AppError ("Check In Not Found", 404)
+        };
+
+        const distanceInMinutesFromCheckInCreation = dayjs(new Date()).diff(
+            checkIn.created_at,
+            'minutes',
+        )
+
+        if(distanceInMinutesFromCheckInCreation > 20){
+            throw new AppError ("Check In expired, you can only validate check ins within 20 minutes of its creation", 400)
+        }
+
+        checkIn.validated_at = new Date();
+
+        await this.checkInsRepository.saveCheckIn(checkIn)
+
+        return checkIn;
+
     }
 
 }
