@@ -7,7 +7,8 @@ import dayjs from "dayjs";
 export class CheckInsRepository implements CheckInsRepositoryInterface{
 
     async createCheckIn(data: CheckInUncheckedCreateInput): Promise<CheckIn> {
-        return await prisma.checkIn.create({data})
+        const checkIn = await prisma.checkIn.create({data})
+        return checkIn
     }
 
     async findByUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null> {
@@ -16,7 +17,7 @@ export class CheckInsRepository implements CheckInsRepositoryInterface{
 
         const checkInOnDate = await prisma.checkIn.findFirst({
             where: {
-                userId,
+                userId: userId,
                 created_at: {
                     gte: startOfTheDay,
                     lte: endOfTheDay,
@@ -29,7 +30,7 @@ export class CheckInsRepository implements CheckInsRepositoryInterface{
 
     async findManyByUserId(userId: string, page: number): Promise<CheckIn[]> {
         const checkIns = await prisma.checkIn.findMany({
-            where: { userId },
+            where: { userId: userId },
             take: 20,
             skip: (page - 1) * 20,
         });
@@ -37,16 +38,25 @@ export class CheckInsRepository implements CheckInsRepositoryInterface{
     }
 
     async countByUserId(userId: string): Promise<number> {
-        return await prisma.checkIn.count({
+        const checkIncount =  await prisma.checkIn.count({
             where: { userId }
         });
+        return checkIncount
     }
 
     async findByid(id: string): Promise<CheckIn | null> {
-        throw new Error("Method not implemented.");
+        const checkIn = await prisma.checkIn.findUnique({where: {id}})
+        return checkIn
     }
-    async saveCheckIn(checkIn: CheckIn): Promise<CheckIn> {
-        throw new Error("Method not implemented.");
+    
+    async saveCheckIn(data: CheckIn): Promise<CheckIn> {
+        const checkIn = await  prisma.checkIn.update({
+            where: {
+                id: data.id
+            },
+            data: data
+        })
+        return checkIn
     }
 
 

@@ -73,7 +73,9 @@ export class CheckInsService {
         )
 
         if(distanceInMinutesFromCheckInCreation > 20){
-            throw new AppError ("Check In expired, you can only validate check ins within 20 minutes of its creation", 400)
+            throw new AppError (
+                "Check In expired, you can only validate check ins within 20 minutes of its creation", 
+                400)
         }
 
         checkIn.validated_at = new Date();

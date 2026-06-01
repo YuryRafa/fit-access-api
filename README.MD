@@ -156,16 +156,5 @@ Each module has unit tests backed by in-memory repositories for fast, isolated t
 npm run test
 ```
 
----
-
-## 📌 Roadmap
-
-- [ ] Complete `countByUserId` in `CheckInsRepository`
-- [ ] Gym search by name and proximity
-- [ ] Proximity validation on check-in using geo-distance utility
-- [ ] JWT-based authentication middleware
-- [ ] Full route definitions
-- [ ] Request validation (Zod)
-- [ ] API documentation (Swagger / OpenAPI)
 
 ---
