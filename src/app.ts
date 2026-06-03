@@ -1,11 +1,16 @@
 import 'dotenv/config'
-import fastify from 'fastify';
-import { appRoutes } from './routes/app-routes';
-import z, { ZodError } from 'zod';
 import { env } from './env';
+import fastifyJwt from '@fastify/jwt'
+import fastify from 'fastify';
+import { appRoutes } from './routes/auth-routes';
+import z, { ZodError } from 'zod';
+
 
 export const app = fastify();
 
+app.register(fastifyJwt, {
+    secret: env.JWT_SECRET
+})
 
 app.register(appRoutes, {prefix: '/api'});
 
