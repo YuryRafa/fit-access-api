@@ -1,0 +1,26 @@
+import request from 'supertest'
+import {app} from '@/app'
+import { beforeAll, afterAll, describe, expect, it } from 'vitest'
+
+
+describe('register (e2e)', () =>{
+
+    beforeAll(async () => {
+        await app.ready()
+    })
+
+    afterAll(async () => {
+        await app.close()
+    })
+    it('should be able to register', async() => {
+        const response = await request(app.server)
+        .post('/auth/register')
+        .send({
+            name: 'Jonh Doe',
+            email: 'johndoe@email.com',
+            password: '123456'
+        })
+
+        expect(response.statusCode).toEqual(201)
+    })
+})

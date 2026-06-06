@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   gym-mgmt-api:
     image: bitnami/postgresql

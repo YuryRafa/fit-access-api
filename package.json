@@ -7,8 +7,10 @@
     "start:dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
     "build": "tsup src --out-dir build",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "vitest --project unit ",
+    "test:e2e": "vitest --project e2e ",
+    "test:watch": "vitest --project unit",
+    "test:e2e:watch": "vitest --project e2e",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest test --ui"
   },
@@ -20,16 +22,17 @@
     "@eslint/js": "10.0.1",
     "@types/eslint": "9.6.1",
     "@types/node": "25.6.0",
+    "@types/supertest": "7.2.0",
     "@vitest/coverage-v8": "4.1.5",
     "@vitest/ui": "4.1.5",
     "eslint": "10.2.1",
     "globals": "17.5.0",
     "prisma": "7.8.0",
+    "supertest": "7.2.2",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.1",
-    "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.1.5"
   },
   "dependencies": {
@@ -41,6 +44,7 @@
     "dayjs": "1.11.20",
     "dotenv": "17.4.2",
     "fastify": "5.8.5",
+    "vite-tsconfig-paths": "6.1.1",
     "zod": "4.3.6"
   }
 }

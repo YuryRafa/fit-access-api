@@ -53,7 +53,6 @@ export class AuthController {
 
     async getUser(request: FastifyRequest, reply: FastifyReply) {
         try {
-            await request.jwtVerify();
             const userId = request.user.sub;
             const foundUser = await authService.getUserProfile({ userId });
             const { password_hash: _, ...userWithoutPassword } = foundUser;
