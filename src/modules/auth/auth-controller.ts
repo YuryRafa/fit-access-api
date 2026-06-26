@@ -3,19 +3,11 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import z from "zod";
 import { AppError } from '@/utils/app-error';
 import { makeAuthService } from './factories/make-auth-service';
+import { registerBodySchema, loginBodySchema } from './auth-schemas';
 
 const authService = makeAuthService();
 
-const registerBodySchema = z.object({
-    name: z.string(),
-    email: z.email(),
-    password: z.string().min(6),
-});
 
-const loginBodySchema = z.object({
-    email: z.email(),
-    password: z.string(),
-});
 
 export class AuthController {
     async register(request: FastifyRequest, reply: FastifyReply) {
