@@ -4,6 +4,7 @@ import fastifyJwt from '@fastify/jwt'
 import fastify from 'fastify';
 import { authRoutes } from './routes/auth-routes';
 import z, { ZodError } from 'zod';
+import { gymsRoutes } from './routes/gyms-routes';
 
 
 export const app = fastify();
@@ -14,6 +15,7 @@ app.register(fastifyJwt, {
 })
 
 app.register(authRoutes, {prefix: '/auth'});
+app.register(gymsRoutes, {prefix: '/gyms'});
 
 
 app.setErrorHandler((error, request, reply) => {
