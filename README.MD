@@ -41,18 +41,21 @@ fit-access-api/
 │   │   │   ├── auth-controller.ts
 │   │   │   ├── auth-repository.ts
 │   │   │   ├── auth-service.ts
+            ├── auth-schemas.ts
 │   │   │   ├── auth.test.ts
 │   │   │   └── in-memory-auth-repository.ts
 │   │   ├── check-ins/       # Daily check-in logic
 │   │   │   ├── check-in-controller.ts
 │   │   │   ├── check-in-repository.ts
 │   │   │   ├── check-in-service.ts
+            ├── check-in-schemas.ts
 │   │   │   ├── check-in.test.ts
 │   │   │   └── in-memory-check-in-repository.ts
 │   │   └── gyms/            # Gym registration & management
 │   │       ├── gyms-controller.ts
 │   │       ├── gyms-repository.ts
 │   │       ├── gyms-service.ts
+            ├── gyms-schemas.ts
 │   │       ├── gyms.test.ts
 │   │       └── in-memory-gyms-repository.ts
 │   ├── routes/              # Route definitions
